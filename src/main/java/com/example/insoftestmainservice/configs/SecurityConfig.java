@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,13 +22,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login/**").permitAll()
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/login/**", "/get_codes/**").permitAll()
+                        .requestMatchers( "/code_save/**").permitAll()
                         .anyRequest().authenticated()
                 ).formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .permitAll()
-                )
+                ).logout(logout -> logout.logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout"))
                 .rememberMe(Customizer.withDefaults());
 
         return http.build();

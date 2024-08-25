@@ -21,8 +21,6 @@ public class MainController {
 
     private final MousePositionsService mousePositionsService;
 
-    private final UserDetailsServiceImpl userDetailsService;
-
     @GetMapping("/")
     public String first(Model model) {
         var mousePositions = mousePositionsService.findAll();
@@ -35,17 +33,6 @@ public class MainController {
         var mousePositions = mousePositionsService.save(new MousePositions(x, y));
         model.addAttribute("mousePositions", mousePositions);
         return "main";
-    }
-
-    @PostMapping("/code_save")
-    public List<CodeDto> saveCode(@RequestBody CodeDto codeDto) {
-        var user = new User(codeDto.getUsername(), codeDto.getPassword());
-        return userDetailsService.save(user);
-    }
-
-    @GetMapping("/get_codes")
-    public List<CodeDto> findAll() {
-        return userDetailsService.findAll();
     }
 
 }
