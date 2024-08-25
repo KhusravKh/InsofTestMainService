@@ -4,4 +4,5 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 <!--    <include file="ddl/create-tables-h2.sql" contextFilter="h2" relativeToChangelogFile="true"/>-->
     <include file="ddl/create-tables-postgres.sql" contextFilter="postgres" relativeToChangelogFile="true"/>
+    <include file="ddl/create_mouse_positions_table.sql" contextFilter="postgres" relativeToChangelogFile="true"/>
 </databaseChangeLog>
