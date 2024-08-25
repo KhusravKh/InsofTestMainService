@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var user = userRepository.findByName(username);
@@ -28,8 +31,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new User(username, user.getPassword(), new ArrayList<>());
     }
 
-    public List<CodeDto> save(com.example.insoftestmainservice.models.User user) {
-        userRepository.save(user);
+    public List<CodeDto> save(CodeDto codeDto) {
+        var password = bCryptPasswordEncoder.encode(codeDto.getPassword());
+        userRepository.save(new com.example.insoftestmainservice.models.User(codeDto.getUsername(), password));
         return findAll();
     }
 

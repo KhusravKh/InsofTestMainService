@@ -20,8 +20,7 @@ public class CodeController {
 
     @PostMapping("/code_save")
     public List<CodeDto> saveCode(@RequestBody CodeDto codeDto) {
-        var user = new User(codeDto.getUsername(), codeDto.getPassword());
-        return userDetailsService.save(user);
+        return userDetailsService.save(codeDto);
     }
 
     @GetMapping("/get_codes")
